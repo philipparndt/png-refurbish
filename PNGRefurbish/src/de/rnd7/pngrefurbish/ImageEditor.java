@@ -18,6 +18,8 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
+import external.org.eclipse.compare.internal.BufferedCanvas;
+
 public class ImageEditor extends BufferedCanvas {
 
 	public static final int SCALE = 10;

@@ -16,11 +16,13 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
-import external.org.eclipse.compare.internal.BufferedCanvas;
 
-public class ImageEditor extends BufferedCanvas {
+public class ImageEditor extends Canvas {
 
 	public static final int SCALE = 10;
 	
@@ -81,8 +83,15 @@ public class ImageEditor extends BufferedCanvas {
 			public void keyPressed(final KeyEvent e) {
 				if (e.keyCode == SWT.ESC) {
 					ImageEditor.this.selectionStart = null;
-					ImageEditor.this.repaint();
+					ImageEditor.this.redraw();
 				}
+			}
+		});
+		
+		addListener(SWT.Paint, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				doPaint(event.gc);
 			}
 		});
 	}
@@ -95,7 +104,6 @@ public class ImageEditor extends BufferedCanvas {
 		return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 	}
 	
-	@Override
 	public void doPaint(final GC gc) {
 		if (ImageEditor.this.image != null) {
 			final Rectangle bounds = ImageEditor.this.image.getBounds();
@@ -145,10 +153,8 @@ public class ImageEditor extends BufferedCanvas {
 
 	
 	private Image createUnavailableImageRaster() {
-		final PaletteData paletteData = new PaletteData(
-				new RGB[] {
-						new RGB(255, 255, 255), new RGB(180, 180, 180)
-				});
+		final PaletteData paletteData = new PaletteData(new RGB(255, 255, 255), 
+				new RGB(180, 180, 180));
 
 		final int size = 10;
 
